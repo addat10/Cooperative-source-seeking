@@ -1,3 +1,14 @@
+%---------------------------------------------------------------------------------------------------
+% For Paper
+% "Robust Performance Analysis of Source-seeking Dynamics with Integral Quadratic Constraints"
+% by Adwait Datar and Christian Hespe and Herbert Werner
+% Copyright (c) Institute of Control Systems, Hamburg University of Technology. All rights reserved.
+% Licensed under the GPLv3. See LICENSE in the project root for license information.
+% Author(s): Adwait Datar
+%---------------------------------------------------------------------------------------------------
+% This script is used to generate data and plot the results for the flocking example presented in
+% Fig.9 in the above paper.
+%---------------------------------------------------------------------------------------------------
 % This file is part of a library for simulation of multi-agent systems
 % developed at the Institute of Control Systems at TUHH.
 %
@@ -16,8 +27,8 @@ profile clear
 
 % Seed the pseudo random number generator. This is required if we want
 % reproducible simulation, e. g. for profiling the code.
-rng(56);
-c_fric_vec=0.1;
+rng(100);
+c_fric_vec=2:5;
 for n_sim=1:length(c_fric_vec)
 
 
@@ -53,7 +64,7 @@ for n_sim=1:length(c_fric_vec)
     %% Initialize the External field
 
     % Type of external field, 1->inverted Gaussians, 2->Quadratic
-    fieldType=1;
+    fieldType=2;
 
     switch fieldType
         case 1 % Inverted Gaussian field
@@ -92,7 +103,7 @@ for n_sim=1:length(c_fric_vec)
     %% Initialize the interaction field
 
     % Type of interaction field, 1->Olfati Saber's field, 2->to be implemented (quadratic)
-    interac_fieldType=1;
+    interac_fieldType=2;
 
     switch interac_fieldType
         case 1 % Olfati Saber interaction field
@@ -117,9 +128,9 @@ for n_sim=1:length(c_fric_vec)
                 case 1 % Linearized quadrocopter
                     c_fric = c_fric_vec(n_sim); mass = 1;
                 case 2 % Dynamic unicycle
-                    c_fric = 1; mass = 10;
+                    c_fric = c_fric_vec(n_sim); mass = 10;
                 case 3 % Hippocanmpus underwater robot
-                    c_fric = 1; mass = 20;
+                    c_fric = c_fric_vec(n_sim); mass = 20;
             end
         case 2
             switch(veh)
@@ -237,6 +248,7 @@ for n_sim=1:length(c_fric_vec)
     [t_sampled, sampled] = leech.resample(dTAnimate);
      save(['./data/traj',int2str(c_fric_vec(n_sim))],'t_sampled','sampled')
 end
+%%
 plot_trajectories
 %% Animate simulation results
 figure()

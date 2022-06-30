@@ -12,9 +12,9 @@ classdef FlockingVehicleAgent < DynamicAgent
     % Define constants of the flocking protocol
     properties(Constant)        
         c_damp          = 0;   % Damping between agents / alignment rule        
-        c_gradient      = 0.1;   % constant multiplying the gradient force
+        c_gradient      = 1;   % constant multiplying the gradient force
         c_hessian       = 0;   % constant multiplying the hessian damping
-        c_interact      = 1e-2; % constant multiplying the interaction force
+        c_interact      = 1; % constant multiplying the interaction force
     end
     
     properties(GetAccess = public, SetAccess = immutable)
@@ -157,7 +157,7 @@ classdef FlockingVehicleAgent < DynamicAgent
             % Can get the true gradient and hessians at obj.position
             % for a posterior analysis
             grad=obj.conc_field.get_true_gradient(obj.position);
-            %hess=obj.conc_field.get_true_hessian(obj.position);
+            hess=obj.conc_field.get_true_hessian(obj.position);
         end
         
         function step(obj)
