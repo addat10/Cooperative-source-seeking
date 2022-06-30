@@ -1,0 +1,3 @@
+[submodule "MAS-Simulation"]
+	path = MAS-Simulation
+	url = https://github.com/TUHH-ICS/MAS-Simulation.git
