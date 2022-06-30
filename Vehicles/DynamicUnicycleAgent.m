@@ -44,7 +44,7 @@ classdef DynamicUnicycleAgent < DynamicUnicycle
             rho = obj.d * omega;
             
             % Calculate local tracking error of the unicycle
-            e = ref - obj.position;
+            e = ref(1:2) - obj.position;
             
             % Evaluate controller equation
             u = obj.controller.step(rot * e, rho);

@@ -1,8 +1,8 @@
 % Generate data
-data2=load('traj2','t_sampled','sampled');
-data3=load('traj3','t_sampled','sampled');
-data4=load('traj4','t_sampled','sampled');
-data5=load('traj5','t_sampled','sampled');
+data2=load('./data/traj2','t_sampled','sampled');
+data3=load('./data/traj3','t_sampled','sampled');
+data4=load('./data/traj4','t_sampled','sampled');
+data5=load('./data/traj5','t_sampled','sampled');
 
 figure()
 subplot(2,2,1)

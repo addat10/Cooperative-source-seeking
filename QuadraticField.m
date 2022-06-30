@@ -4,7 +4,7 @@
 % Original Authors: Adwait Datar <adwait.datar@tuhh.de>
 
 classdef QuadraticField
-    %field_inv_gaussians 
+    % Underlying quadratic scalar field 
     % This object defines an underlying scalar field as a Quadratic field    
     % Could define a Baseclass called field to this class to generalize to
     % other fields
@@ -31,15 +31,13 @@ classdef QuadraticField
             field_eval = obj.scale*(-0.5*diag(e'*obj.Q*e)');
             field_eval=-1*field_eval;
         end
-        function grad = get_true_gradient(obj,q_agent) 
-            %GET.GRAD_ESTIMATE 
+        function grad = get_true_gradient(obj,q_agent)            
             %   This function asks for a gradient at the q_agent location. 
             %   Can be thought of as a gradient measurement 
             e=(q_agent-obj.center);
             grad = obj.scale*obj.Q*e;
         end
         function hess = get_true_hessian(obj,q_agent) 
-            %GET.GRAD_ESTIMATE 
             %   This function asks for a hessian at the q_agent location. 
             %   Can be thought of as hessian measurement             
             hess = obj.Q;
@@ -47,25 +45,19 @@ classdef QuadraticField
         function [X,Y,Z]=data_for_contour(obj,lim)
             % This function creates mesh grid data for plotting contours based on the
             % underlying source field
-%             no_minima=obj.no_centers;
-%             d=obj.dim;
             XX = lim(1,1):1:lim(1,2);
             YY = lim(2,1):1:lim(2,2);    
             [X,Y] = meshgrid(XX,YY); 
             Z=zeros(size(X));
-%             for i=1:no_minima
-%                 Source_i=obj.centers(:,i);
-%                 Sigma_i=obj.Sigmas(1:d,(i-1)*d+1:i*d);
-%                 scale_i=obj.scales(i);
-                Ex=[XX-obj.center(1)];
-                Ey=[YY-obj.center(2)];
-                Z_temp=zeros(size(X));
-                for m=1:size(YY,2)
-                    for n=1:size(XX,2)
-                        e=[Ex(n);Ey(m)];
-                        Z_temp(m,n)=obj.scale*exp(-0.5*e'*obj.Q*e);
-                    end
+            Ex=[XX-obj.center(1)];
+            Ey=[YY-obj.center(2)];
+            Z_temp=zeros(size(X));
+            for m=1:size(YY,2)
+                for n=1:size(XX,2)
+                    e=[Ex(n);Ey(m)];
+                    Z_temp(m,n)=obj.scale*(-0.5*e'*obj.Q*e);
                 end
+            end
                 Z=Z+Z_temp;
 %              end 
         end

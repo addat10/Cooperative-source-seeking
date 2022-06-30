@@ -29,7 +29,7 @@ classdef HippoCampusAgent < HippoCampus
 
         function step(obj,ref)            
             % Calculate control error
-            e = obj.position - ref;
+            e = obj.position - ref(1:3);
             
             % Implement linear thrust controller
             vel = -HippoCampusAgent.K_p_pos * norm(e);

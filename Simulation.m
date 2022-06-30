@@ -17,7 +17,7 @@ profile clear
 % Seed the pseudo random number generator. This is required if we want
 % reproducible simulation, e. g. for profiling the code.
 rng(56);
-c_fric_vec=3;
+c_fric_vec=0.1;
 for n_sim=1:length(c_fric_vec)
 
 
@@ -25,7 +25,7 @@ for n_sim=1:length(c_fric_vec)
     % 1-> Linearized Quadrocopter
     % 2-> Dynamic Unicycle
     % 3-> HippoCampus underwater vehicle
-    veh=3;
+    veh=1;
 
     % Flag to enable exporting a video from the simulation results
     saveVideo = false;
@@ -235,7 +235,7 @@ for n_sim=1:length(c_fric_vec)
 
     % Resample the data. The function uses a ZOH resampling approach 
     [t_sampled, sampled] = leech.resample(dTAnimate);
-     save(['traj',int2str(c_fric_vec(n_sim))],'t_sampled','sampled')
+     save(['./data/traj',int2str(c_fric_vec(n_sim))],'t_sampled','sampled')
 end
 plot_trajectories
 %% Animate simulation results

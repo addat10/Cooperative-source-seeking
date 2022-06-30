@@ -12,9 +12,9 @@ classdef FlockingVehicleAgent < DynamicAgent
     % Define constants of the flocking protocol
     properties(Constant)        
         c_damp          = 0;   % Damping between agents / alignment rule        
-        c_gradient      = 1;   % constant multiplying the gradient force
+        c_gradient      = 0.1;   % constant multiplying the gradient force
         c_hessian       = 0;   % constant multiplying the hessian damping
-        c_interact      = 1; % constant multiplying the interaction force
+        c_interact      = 1e-2; % constant multiplying the interaction force
     end
     
     properties(GetAccess = public, SetAccess = immutable)
@@ -128,36 +128,36 @@ classdef FlockingVehicleAgent < DynamicAgent
             % This function estimates the gradient and the hessian of the 
             % field at the current agent location.
             
-%             field_estimate  = obj.position'*obj.QuadModelEst.Q_id*obj.position+obj.QuadModelEst.b_id'*obj.position+obj.QuadModelEst.c_id;
-%             field_data_self = field_data.values(1);
-%             
-%             % We use the following heuristic for identifying the underlying
-%             % field which has been observed to work for an inverted gaussian field:
-%             % 1. If we have less than three data points, we assume a zero
-%             % model since the identfied model wouldn\t be reliable
-%             % 2. If we have three to ten data points, we try to identify a
-%             % linear model which has three model parameters (grad and bias)
-%             % 3. If we have more than ten data points, we identify a
-%             % quadratic model which has 6 model parameters (hess, grad and bias)
-%             data_size=size(field_data.values,2);
-%             if abs(field_estimate-field_data_self) >= obj.field_sensor.noise_bound
-%                 if (data_size>=3) && (data_size<10)
-%                     obj.QuadModelEst=obj.field_sensor.linear_regression(field_data);
-%                 elseif (data_size>=10)
-%                     obj.QuadModelEst=obj.field_sensor.quadratic_regression(field_data);
-%                 else
-%                     obj.QuadModelEst.Q_id  = zeros(obj.dim);
-%                     obj.QuadModelEst.b_id  = zeros(obj.dim,1);
-%                     obj.QuadModelEst.c_id  = 0;
-%                 end
-%             end
-%             grad = 2*obj.QuadModelEst.Q_id*obj.position+obj.QuadModelEst.b_id;
-%             hess = 2*obj.QuadModelEst.Q_id;
+            field_estimate  = obj.position'*obj.QuadModelEst.Q_id*obj.position+obj.QuadModelEst.b_id'*obj.position+obj.QuadModelEst.c_id;
+            field_data_self = field_data.values(1);
+            
+            % We use the following heuristic for identifying the underlying
+            % field which has been observed to work for an inverted gaussian field:
+            % 1. If we have less than three data points, we assume a zero
+            % model since the identfied model wouldn\t be reliable
+            % 2. If we have three to ten data points, we try to identify a
+            % linear model which has three model parameters (grad and bias)
+            % 3. If we have more than ten data points, we identify a
+            % quadratic model which has 6 model parameters (hess, grad and bias)
+            data_size=size(field_data.values,2);
+            if abs(field_estimate-field_data_self) >= obj.field_sensor.noise_bound
+                if (data_size>=3) && (data_size<10)
+                    obj.QuadModelEst=obj.field_sensor.linear_regression(field_data);
+                elseif (data_size>=10)
+                    obj.QuadModelEst=obj.field_sensor.quadratic_regression(field_data);
+                else
+                    obj.QuadModelEst.Q_id  = zeros(obj.dim);
+                    obj.QuadModelEst.b_id  = zeros(obj.dim,1);
+                    obj.QuadModelEst.c_id  = 0;
+                end
+            end
+            grad = 2*obj.QuadModelEst.Q_id*obj.position+obj.QuadModelEst.b_id;
+            hess = 2*obj.QuadModelEst.Q_id;
             
             % Can get the true gradient and hessians at obj.position
             % for a posterior analysis
             grad=obj.conc_field.get_true_gradient(obj.position);
-            hess=obj.conc_field.get_true_hessian(obj.position);
+            %hess=obj.conc_field.get_true_hessian(obj.position);
         end
         
         function step(obj)
@@ -209,11 +209,9 @@ classdef FlockingVehicleAgent < DynamicAgent
                 case 1
                     error('Dimensions of virtual particle and vehicle do not match')
                 case 2
-                    %veh_ref=[obj.position_vir;obj.velocity_vir];
-                    veh_ref=[obj.position_vir];
+                    veh_ref=[obj.position_vir;obj.velocity_vir];                    
                 case 3
-%                     veh_ref=[obj.position_vir;0;obj.velocity_vir;0];
-                    veh_ref=[obj.position_vir;0];
+                    veh_ref=[obj.position_vir;0;obj.velocity_vir;0];
             end
 			for i=1:obj.no_veh_steps
 				obj.Vehicle.step(veh_ref);
