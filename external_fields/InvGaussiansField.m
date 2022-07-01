@@ -51,10 +51,23 @@ classdef InvGaussiansField
                 Sigma_i=obj.Sigmas(:,(i-1)*obj.dim+1:i*obj.dim);
                 scale_i=obj.scales(i);
                 e=(q_agent-source_i);
-                grad = grad +scale_i*exp(-0.5*e'*inv(Sigma_i)*e)*inv(Sigma_i)*e;
+                inv_Sigma_i=inv(Sigma_i);
+                grad = grad +scale_i*exp(-0.5*e'*inv_Sigma_i*e)*inv_Sigma_i*e;
             end
         end
-        % Should also define a get_true_hessian function later
+        function hess = get_true_hessian(obj,q_agent) 
+            %   This function asks for a hessian at the q_agent location. 
+            %   Can be thought of as hessian measurement             
+            hess=zeros(obj.dim,1);            
+            for i=1:obj.no_centers
+                source_i=obj.centers(:,i);
+                Sigma_i=obj.Sigmas(:,(i-1)*obj.dim+1:i*obj.dim);
+                scale_i=obj.scales(i);
+                e=(q_agent-source_i);
+                inv_Sigma_i=inv(Sigma_i);
+                hess = hess +scale_i*exp(-0.5*e'*inv_Sigma_i*e)*(inv_Sigma_i*e*e'*inv_Sigma_i' -inv_Sigma_i);
+            end
+        end    
         function [X,Y,Z]=data_for_contour(obj,lim)
             % This function creates mesh grid data for plotting contours based on the
             % underlying source field

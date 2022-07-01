@@ -1,22 +1,26 @@
 % Generate data
-data2=load('./data/traj2','t_sampled','sampled');
-data3=load('./data/traj3','t_sampled','sampled');
-data4=load('./data/traj4','t_sampled','sampled');
-data5=load('./data/traj5','t_sampled','sampled');
+if ~exist('veh','var')
+    veh=3;
+    c_fric_vec=2:5;
+end
+data2=load(['./data/traj_veh_',int2str(veh),'_c_fric_',int2str(c_fric_vec(1))],'t_sampled','sampled');
+data3=load(['./data/traj_veh_',int2str(veh),'_c_fric_',int2str(c_fric_vec(2))],'t_sampled','sampled');    
+data4=load(['./data/traj_veh_',int2str(veh),'_c_fric_',int2str(c_fric_vec(3))],'t_sampled','sampled');
+data5=load(['./data/traj_veh_',int2str(veh),'_c_fric_',int2str(c_fric_vec(4))],'t_sampled','sampled');    
 
 figure()
 subplot(2,2,1)
 plot_traj(data2.t_sampled,data2.sampled)
-title('kd=2')
+title(['kd=',int2str(c_fric_vec(1))])
 subplot(2,2,2)
 plot_traj(data3.t_sampled,data3.sampled)
-title('kd=3')
+title(['kd=',int2str(c_fric_vec(2))])
 subplot(2,2,3)
 plot_traj(data4.t_sampled,data4.sampled)
-title('kd=4')
+title(['kd=',int2str(c_fric_vec(3))])
 subplot(2,2,4)
 plot_traj(data5.t_sampled,data5.sampled)
-title('kd=5(LMI feasible)')
+title(['kd=',int2str(c_fric_vec(4))])
 %% Use defined functions
 function []=plot_traj(t_sampled,sampled)
     xx=squeeze(sampled.position(:,1,:));

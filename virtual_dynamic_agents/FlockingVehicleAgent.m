@@ -13,7 +13,7 @@ classdef FlockingVehicleAgent < DynamicAgent
     properties(Constant)        
         c_damp          = 0;   % Damping between agents / alignment rule        
         c_gradient      = 1;   % constant multiplying the gradient force
-        c_hessian       = 0;   % constant multiplying the hessian damping
+        c_hessian       = 1;   % constant multiplying the hessian damping
         c_interact      = 1; % constant multiplying the interaction force
     end
     

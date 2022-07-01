@@ -15,8 +15,8 @@
 % Original Authors: Adwait Datar <adwait.datar@tuhh.de>
 %                   Christian Hespe <christian.hespe@tuhh.de>
 
-addpath(genpath('mas-simulation/lib'))
-addpath('./Vehicles/')
+% addpath(genpath('mas-simulation/lib'))
+addpath(genpath('./.'))
 
 % Clear workspace to increase repeatability
 clc
@@ -27,7 +27,7 @@ profile clear
 
 % Seed the pseudo random number generator. This is required if we want
 % reproducible simulation, e. g. for profiling the code.
-rng(100);
+rng(56);
 c_fric_vec=2:5;
 for n_sim=1:length(c_fric_vec)
 
@@ -36,7 +36,7 @@ for n_sim=1:length(c_fric_vec)
     % 1-> Linearized Quadrocopter
     % 2-> Dynamic Unicycle
     % 3-> HippoCampus underwater vehicle
-    veh=1;
+    veh=3;
 
     % Flag to enable exporting a video from the simulation results
     saveVideo = false;
@@ -45,7 +45,7 @@ for n_sim=1:length(c_fric_vec)
     agentCount = 3;   % Number of agents in the network
     dimension  = 2;    % Dimension of the space the agents move in
     dT         = 0.01; % Size of the simulation time steps [s]
-    steps      = 10000;  % number of steps
+    steps      = 100000;  % number of steps
     Tf         = dT*steps; %Final Time
     %% Initialize the network
 
@@ -64,15 +64,15 @@ for n_sim=1:length(c_fric_vec)
     %% Initialize the External field
 
     % Type of external field, 1->inverted Gaussians, 2->Quadratic
-    fieldType=2;
+    fieldType=1;
 
     switch fieldType
         case 1 % Inverted Gaussian field
             % Field Parameters
-            no_centers=11;
+            no_centers=5;
             fcenter=50;
             frange=50;
-            fvar=1e1;
+            fvar=10e1;
             fscale=50;
             conc_Field=InvGaussiansField(dimension,no_centers,fcenter,frange,fvar,fscale);
         case 2
@@ -84,7 +84,7 @@ for n_sim=1:length(c_fric_vec)
     %% Initialize the agent sensor
 
     % Type of agent sensor, 1->single measurement, 2-> multiple measurements
-    sensorType=2;
+    sensorType=1;
 
     switch sensorType
         case 1  % single exact measurement at the agent pos
@@ -246,7 +246,7 @@ for n_sim=1:length(c_fric_vec)
 
     % Resample the data. The function uses a ZOH resampling approach 
     [t_sampled, sampled] = leech.resample(dTAnimate);
-     save(['./data/traj',int2str(c_fric_vec(n_sim))],'t_sampled','sampled')
+     save(['./data/traj_veh_',int2str(veh),'_c_fric_',int2str(c_fric_vec(n_sim))],'t_sampled','sampled')
 end
 %%
 plot_trajectories
