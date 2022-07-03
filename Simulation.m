@@ -25,11 +25,11 @@ clear
 % Reset the Matlab profiler
 profile clear
 
-% Seed the pseudo random number generator. This is required if we want
-% reproducible simulation, e. g. for profiling the code.
-rng(56);
-c_fric_vec=2:5;
+c_fric_vec=[3,6,9,12];
 for n_sim=1:length(c_fric_vec)
+    % Seed the pseudo random number generator. This is required if we want
+    % reproducible simulation, e. g. for profiling the code.
+    rng(56);
 
 
     % Select Vehicle Model
@@ -45,7 +45,7 @@ for n_sim=1:length(c_fric_vec)
     agentCount = 3;   % Number of agents in the network
     dimension  = 2;    % Dimension of the space the agents move in
     dT         = 0.01; % Size of the simulation time steps [s]
-    steps      = 100000;  % number of steps
+    steps      = 20000;  % number of steps
     Tf         = dT*steps; %Final Time
     %% Initialize the network
 
@@ -246,25 +246,29 @@ for n_sim=1:length(c_fric_vec)
 
     % Resample the data. The function uses a ZOH resampling approach 
     [t_sampled, sampled] = leech.resample(dTAnimate);
-     save(['./data/traj_veh_',int2str(veh),'_c_fric_',int2str(c_fric_vec(n_sim))],'t_sampled','sampled')
+    
+    % Compute boundary
+    x_pos  = squeeze(leech.data.position(:,1,:));
+    y_pos  = squeeze(leech.data.position(:,2,:));
+
+    x_pos_vir  = squeeze(leech.data.position_vir(:,1,:));
+    y_pos_vir  = squeeze(leech.data.position_vir(:,2,:));
+    
+    
+    % Compute contour lines
+    bounds = @(x) [min(min(x)), max(max(x))];
+    lim     = [ bounds(x_pos); bounds(y_pos) ];
+    [X,Y,Z] = conc_Field.data_for_contour(lim);
+    
+     save(['./data/traj_veh_',int2str(veh),'_c_fric_',int2str(c_fric_vec(n_sim))],'t_sampled','sampled','x_pos','y_pos','x_pos_vir','y_pos_vir','X','Y','Z','lim','veh')
 end
 %%
-plot_trajectories
+% plot_trajectories
 %% Animate simulation results
 figure()
 
-% Compute boundary
-x_pos  = squeeze(leech.data.position(:,1,:));
-y_pos  = squeeze(leech.data.position(:,2,:));
 
-x_pos_vir  = squeeze(leech.data.position_vir(:,1,:));
-y_pos_vir  = squeeze(leech.data.position_vir(:,2,:));
 
-bounds = @(x) [min(min(x)), max(max(x))];
-
-% Compute contour lines
-lim     = [ bounds(x_pos); bounds(y_pos) ];
-[X,Y,Z] = conc_Field.data_for_contour(lim);
 
 % Open video file with mp4 encoding
 if saveVideo
@@ -274,6 +278,7 @@ if saveVideo
 else
     video = [];
 end
+
 
 for k = 1:length(t_sampled)    
     contour(X,Y,Z)
