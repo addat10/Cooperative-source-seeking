@@ -3,7 +3,7 @@ clc
 %%
 
 % Vehicle 2: Dynamic Unicycle
-data=load(['./data/traj_veh_1_c_fric_5']);
+data=load(['./data/traj_veh_3_c_fric_1']);
 
 figure()
 rng(100)

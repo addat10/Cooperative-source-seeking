@@ -25,7 +25,7 @@ clear
 % Reset the Matlab profiler
 profile clear
 
-c_fric_vec=[2,3,4,5];
+c_fric_vec=[1,4,7,10];
 for n_sim=1:length(c_fric_vec)
     % Seed the pseudo random number generator. This is required if we want
     % reproducible simulation, e. g. for profiling the code.
@@ -36,7 +36,7 @@ for n_sim=1:length(c_fric_vec)
     % 1-> Linearized Quadrocopter
     % 2-> Dynamic Unicycle
     % 3-> HippoCampus underwater vehicle
-    veh=1;
+    veh=3;
 
     % Flag to enable exporting a video from the simulation results
     saveVideo = false;
@@ -45,7 +45,7 @@ for n_sim=1:length(c_fric_vec)
     agentCount = 3;   % Number of agents in the network
     dimension  = 2;    % Dimension of the space the agents move in
     dT         = 0.01; % Size of the simulation time steps [s]
-    steps      = 5000;  % number of steps
+    steps      = 15000;  % number of steps
     Tf         = dT*steps; %Final Time
     %% Initialize the network
 
@@ -64,7 +64,7 @@ for n_sim=1:length(c_fric_vec)
     %% Initialize the External field
 
     % Type of external field, 1->inverted Gaussians, 2->Quadratic
-    fieldType=2;
+    fieldType=1;
 
     switch fieldType
         case 1 % Inverted Gaussian field
@@ -150,7 +150,7 @@ for n_sim=1:length(c_fric_vec)
     Agents = cell(agentCount, 1);
     for i = 1:length(Agents)
         % Randomly place the agents in the square [0,100]^2
-        pos = 50 + 30 * (rand(dimension, 1) - 0.5);
+        pos = 50 + 10 * (rand(dimension, 1) - 0.5);
         % Randomly assign the agent velocites in [-5,5]^2
         vel = 0 * (rand(dimension, 1) - 0.5);    
         id=Network.getId();    

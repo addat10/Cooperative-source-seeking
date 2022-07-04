@@ -1,7 +1,7 @@
 % Generate data
 if ~exist('veh','var')
-    veh=1;
-    c_fric_vec=[2,3,4,5];    
+    veh=3;
+    c_fric_vec=[1,4,7,10];    
 end
 data2=load(['./data/traj_veh_',int2str(veh),'_c_fric_',int2str(c_fric_vec(1))],'t_sampled','sampled');
 data3=load(['./data/traj_veh_',int2str(veh),'_c_fric_',int2str(c_fric_vec(2))],'t_sampled','sampled');    
