@@ -25,7 +25,7 @@ clear
 % Reset the Matlab profiler
 profile clear
 
-c_fric_vec=[3,6,9,12];
+c_fric_vec=[3,4,5,6];
 for n_sim=1:length(c_fric_vec)
     % Seed the pseudo random number generator. This is required if we want
     % reproducible simulation, e. g. for profiling the code.
@@ -36,7 +36,7 @@ for n_sim=1:length(c_fric_vec)
     % 1-> Linearized Quadrocopter
     % 2-> Dynamic Unicycle
     % 3-> HippoCampus underwater vehicle
-    veh=3;
+    veh=1;
 
     % Flag to enable exporting a video from the simulation results
     saveVideo = false;
@@ -54,7 +54,7 @@ for n_sim=1:length(c_fric_vec)
 
     switch netType
         case 1
-            range   = 7*1.2;      % Range of the radio communication
+            range   = inf;      % Range of the radio communication
             Network = IdealNetwork(agentCount, dT, dimension, range);
         case 2
             range     = 10;    % Range of the radio communication
@@ -64,7 +64,7 @@ for n_sim=1:length(c_fric_vec)
     %% Initialize the External field
 
     % Type of external field, 1->inverted Gaussians, 2->Quadratic
-    fieldType=1;
+    fieldType=2;
 
     switch fieldType
         case 1 % Inverted Gaussian field
