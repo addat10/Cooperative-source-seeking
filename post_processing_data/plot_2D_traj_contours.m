@@ -6,6 +6,7 @@ clc
 data=load(['./data/traj_veh_1_c_fric_5']);
 
 figure()
+rng(100)
 plot_contour_2d_traj(data.t_sampled,data.X,data.Y,data.Z,data.lim,data.sampled,data.veh,data.x_pos,data.y_pos,data.x_pos_vir,data.y_pos_vir);
 
 %% User defined functions
@@ -28,6 +29,7 @@ function []=plot_contour_2d_traj(t_sampled,X,Y,Z,lim,sampled,veh,x_pos,y_pos,x_p
             plot(pos(end,1,agent),pos(end,2,agent),'X','color',color_gen(:,agent), 'LineWidth', 1,'MarkerSize',15)    
             end
         end
+        
         xlim(lim(1,:));
         ylim(lim(2,:));     
         drawnow limitrate

@@ -25,11 +25,11 @@ clear
 % Reset the Matlab profiler
 profile clear
 
-c_fric_vec=[3,4,5,6];
+c_fric_vec=[2,3,4,5];
 for n_sim=1:length(c_fric_vec)
     % Seed the pseudo random number generator. This is required if we want
     % reproducible simulation, e. g. for profiling the code.
-    rng(56);
+    rng(100);
 
 
     % Select Vehicle Model
@@ -45,7 +45,7 @@ for n_sim=1:length(c_fric_vec)
     agentCount = 3;   % Number of agents in the network
     dimension  = 2;    % Dimension of the space the agents move in
     dT         = 0.01; % Size of the simulation time steps [s]
-    steps      = 20000;  % number of steps
+    steps      = 5000;  % number of steps
     Tf         = dT*steps; %Final Time
     %% Initialize the network
 
@@ -54,7 +54,7 @@ for n_sim=1:length(c_fric_vec)
 
     switch netType
         case 1
-            range   = inf;      % Range of the radio communication
+            range   = inf; %7*1.2;      % Range of the radio communication
             Network = IdealNetwork(agentCount, dT, dimension, range);
         case 2
             range     = 10;    % Range of the radio communication
@@ -257,7 +257,8 @@ for n_sim=1:length(c_fric_vec)
     
     % Compute contour lines
     bounds = @(x) [min(min(x)), max(max(x))];
-    lim     = [ bounds(x_pos); bounds(y_pos) ];
+    scale_limits=@(x) mean(x)+1.2*(x-mean(x));
+    lim     = [scale_limits(bounds(x_pos)); scale_limits(bounds(y_pos))];
     [X,Y,Z] = conc_Field.data_for_contour(lim);
     
      save(['./data/traj_veh_',int2str(veh),'_c_fric_',int2str(c_fric_vec(n_sim))],'t_sampled','sampled','x_pos','y_pos','x_pos_vir','y_pos_vir','X','Y','Z','lim','veh')
