@@ -156,8 +156,8 @@ classdef FlockingVehicleAgent < DynamicAgent
             
             % Can get the true gradient and hessians at obj.position
             % for a posterior analysis
-            grad=obj.conc_field.get_true_gradient(obj.position);
-            hess=obj.conc_field.get_true_hessian(obj.position);
+%             grad=obj.conc_field.get_true_gradient(obj.position);
+%             hess=obj.conc_field.get_true_hessian(obj.position);
         end
         
         function step(obj)

@@ -90,7 +90,7 @@ for n_sim=1:length(c_fric_vec)
         case 1  % single exact measurement at the agent pos
             N               =1;    % Number of measurements around the agent pos
             sensor_range    =2;     % sensor range around the agent pos
-            noise_bound     =0;    % apriori known bound on measurement noise
+            noise_bound     =10;    % apriori known bound on measurement noise
             C_reg           =0;  % L1 regularization tuning.(0-> no regularization)
             field_sensor    =AgentFieldSensor(sensor_range,N,noise_bound,conc_Field,C_reg);
         case 2 % multiple noisy measurements at and near the agent pos
